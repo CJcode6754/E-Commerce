@@ -39,6 +39,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@inertiajs/react";
+import { ModeToggle } from "../mode-toggle";
 
 // Sample cart items for demonstration
 const initialCartItems = [
@@ -101,9 +102,8 @@ export default function NavBarOne() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
-        isScrolled ? "bg-white dark:bg-gray-800 shadow-md" : "bg-white dark:bg-gray-800"
-      }`}
+      className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${isScrolled ? "bg-white dark:bg-gray-800 shadow-md" : "bg-white dark:bg-gray-800"
+        }`}
     >
       <div className="container mx-auto">
         <div className="flex h-20 items-center justify-between px-4 md:px-6">
@@ -142,6 +142,7 @@ export default function NavBarOne() {
 
           {/* Actions */}
           <div className="flex items-center gap-1 md:gap-6">
+            <ModeToggle />
             {/* Account */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -165,67 +166,12 @@ export default function NavBarOne() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Help */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hidden md:flex rounded-full"
-                >
-                  <HelpCircle className="h-5 w-5" />
-                  <span className="sr-only">Help</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Customer Support</DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-6 py-4">
-                  <div className="rounded-lg bg-slate-50 p-4">
-                    <h3 className="font-medium mb-2">Contact Us</h3>
-                    <p className="text-sm text-slate-600 mb-1">
-                      Email: support@luxeplus.com
-                    </p>
-                    <p className="text-sm text-slate-600 mb-1">
-                      Phone: +1 (800) 123-4567
-                    </p>
-                    <p className="text-sm text-slate-600">
-                      Hours: 24/7 Concierge Support
-                    </p>
-                  </div>
-                  <div className="grid gap-3">
-                    <h3 className="font-medium">Quick Links</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Link
-                        href="#"
-                        className="text-sm text-orange-500 hover:underline"
-                      >
-                        Shipping Information
-                      </Link>
-                      <Link
-                        href="#"
-                        className="text-sm text-orange-500 hover:underline"
-                      >
-                        Returns & Exchanges
-                      </Link>
-                      <Link
-                        href="#"
-                        className="text-sm text-orange-500 hover:underline"
-                      >
-                        Order Tracking
-                      </Link>
-                      <Link
-                        href="#"
-                        className="text-sm text-orange-500 hover:underline"
-                      >
-                        FAQ
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
+            <Link
+              href={route('login')}
+              className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+            >
+              Login
+            </Link>
 
             {/* Shopping Cart */}
             <Sheet>
