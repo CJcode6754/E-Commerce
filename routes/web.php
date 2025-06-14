@@ -12,9 +12,17 @@ Route::get('/detail', function () {
 })->name('product.details');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+    Route::get('dashboard', action: function () {
+        return Inertia::render('dashboard/index');
     })->name('dashboard');
+
+    Route::get('/dashboard/products', action: function () {
+        return Inertia::render('dashboard/products/index');
+    })->name('products');
+
+    Route::get('/dashboard/categories', action: function () {
+        return Inertia::render('dashboard/categories/index');
+    })->name('categories');
 });
 
 require __DIR__.'/settings.php';

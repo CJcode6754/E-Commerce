@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+        [$message, $author] = ["Welcome to Our Trendora Website", "CjDev"];
 
         return [
             ...parent::share($request),
