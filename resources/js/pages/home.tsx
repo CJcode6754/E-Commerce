@@ -2,16 +2,17 @@ import ShopBanner from '@/components/frontend/ShopBanner'
 import ShopCategory from '@/components/frontend/ShopCategory'
 import ShopFeaturedProducts from '@/components/frontend/ShopFeaturedProducts'
 import ShopFrontLayout from '@/layouts/ShopFrontLayout'
+import { CategoryItem } from '@/types/categories'
 import React from 'react'
 
-const home = () => {
+const home = ({categories}:{categories:CategoryItem[]}) => {
+  console.log(categories);
   return (
     <ShopFrontLayout>
       <div className='min-h-screen'>
         <ShopBanner/>
-        
         <div className="py-16">
-          <ShopCategory/>
+          <ShopCategory categories={categories}/>
         </div>
 
         <div className="py-8">

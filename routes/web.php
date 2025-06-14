@@ -1,11 +1,9 @@
 <?php
-
+use App\Http\Controllers\Shop\HomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'get_home_data'])->name('home');
 
 Route::get('/detail', function () {
     return Inertia::render('product-details');
