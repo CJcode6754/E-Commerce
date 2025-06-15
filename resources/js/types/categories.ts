@@ -3,13 +3,8 @@ export interface CategoryItem {
   name: string;
   slug: string;
   image: string;
-  icon?: React.ReactNode;
   color: string;
-  textColor: string;
-  bgColor: string;
-  count?: number;
-  featured?: boolean;
-  discount?: string;
+  description: string;
 }
 
 export interface CreateCategoryItem {

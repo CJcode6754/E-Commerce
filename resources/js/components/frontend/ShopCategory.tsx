@@ -165,34 +165,34 @@ export default function ShopCategory({ categories }: { categories: CategoryItem[
                         </div>
 
                         {/* Discount tag if available */}
-                        {category.discount && (
+                        {/* {category.discount && (
                           <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md">
                             {category.discount}
                           </div>
-                        )}
+                        )} */}
 
                         {/* Featured tag */}
-                        {category.featured && (
+                        {/* {category.featured && (
                           <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md flex items-center">
                             <Star className="w-3 h-3 mr-1 fill-white" /> Featured
                           </div>
-                        )}
+                        )} */}
                       </div>
 
                       {/* Card bottom with details */}
                       <div className="p-4 flex flex-col">
                         <div className="flex items-center justify-between mb-3">
                           {/* Icon */}
-                          <div
+                          {/* <div
                             className={`p-2 rounded-full ${category.textColor} bg-white shadow-sm`}
                           >
                             {category.icon}
-                          </div>
+                          </div> */}
 
                           {/* Product count */}
-                          <div className="text-sm text-gray-600">
+                          {/* <div className="text-sm text-gray-600">
                             {category.count} products
-                          </div>
+                          </div> */}
                         </div>
 
                         {/* Shop now button */}
@@ -200,7 +200,7 @@ export default function ShopCategory({ categories }: { categories: CategoryItem[
                         <button
                           className={cn(
                             `mt-2 py-2 px-4 rounded-lg text-white flex items-center justify-center font-medium text-sm hover:opacity-90 transition-opacity`,
-                            `${category.bgColor}`
+                            `${category.color}`
                           )}
                         >
                           <ShoppingBag className="w-4 h-4 mr-2 text-gray-800" /> <span className="text-black">Shop Now</span>

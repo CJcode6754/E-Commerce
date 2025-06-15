@@ -68,7 +68,7 @@ import {
 } from "@/components/ui/card";
 import * as XLSX from "xlsx";
 import { Link, router, useForm } from "@inertiajs/react";
-import { CreateCategoryItem } from "@/types/categories";
+import { CategoryItem, CreateCategoryItem } from "@/types/categories";
 import { CompactFileInput } from "../FormInputs";
 import { Textarea } from "@headlessui/react";
 import InputError from "../input-error";
@@ -84,84 +84,26 @@ export type Product = {
   status: "in-stock" | "out-stock";
 };
 
-const categories: Product[] = [
-  {
-    id: "prod-001",
-    name: "Wireless Headphones",
-    category: "Electronics",
-    salesCount: 342,
-    image: "/",
-    stock: 56,
-    price: 129.99,
-    status: "in-stock",
-  },
-  {
-    id: "prod-002",
-    name: "Smart Watch",
-    category: "Electronics",
-    salesCount: 189,
-    image: "/",
-    stock: 23,
-    price: 249.99,
-    status: "in-stock",
-  },
-  {
-    id: "prod-003",
-    name: "Yoga Mat",
-    category: "Fitness",
-    salesCount: 421,
-    image: "/",
-    stock: 0,
-    price: 39.99,
-    status: "out-stock",
-  },
-  {
-    id: "prod-004",
-    name: "Coffee Maker",
-    category: "Home",
-    salesCount: 287,
-    image: "",
-    stock: 42,
-    price: 89.99,
-    status: "in-stock",
-  },
-  {
-    id: "prod-005",
-    name: "Bluetooth Speaker",
-    category: "Electronics",
-    salesCount: 512,
-    image: "/",
-    stock: 78,
-    price: 79.99,
-    status: "in-stock",
-  },
-  {
-    id: "prod-006",
-    name: "Fitness Tracker",
-    category: "Fitness",
-    salesCount: 176,
-    image: "/",
-    stock: 0,
-    price: 59.99,
-    status: "out-stock",
-  },
-];
-
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<CategoryItem>[] = [
   {
     accessorKey: "image",
     header: "Image",
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <img
-          src={row.getValue("image")}
-          alt={row.getValue("name")}
-          width={40}
-          height={40}
-          className="rounded-md object-cover"
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const image_path = row.original.image.startsWith("category_image/") ? `/storage/${row.original.image}` : row.original.image
+      return (
+        (
+          <div className="flex items-center justify-center">
+            <img
+              src={image_path}
+              alt={row.getValue("name")}
+              width={40}
+              height={40}
+              className="rounded-md object-cover"
+            />
+          </div>
+        )
+      )
+    },
     enableSorting: false,
   },
   {
@@ -182,68 +124,20 @@ export const columns: ColumnDef<Product>[] = [
     ),
   },
   {
-    accessorKey: "price",
+    accessorKey: "description",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Price
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const price = Number.parseFloat(row.getValue("price"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(price);
-
-      return <div>{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "salesCount",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Sales Count
+          Description
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="text-center">{row.getValue("salesCount")}</div>
-    ),
-  },
-  {
-    id: "totalSales",
-    header: "Total Sales",
-    cell: ({ row }) => {
-      const price = Number.parseFloat(row.getValue("price"));
-      const salesCount = Number.parseInt(row.getValue("salesCount"));
-      const totalSales = price * salesCount;
-
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(totalSales);
-
-      return <div>USD {formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "category",
-    header: "Suppliers",
-    cell: ({ row }) => (
-      <Link href="">
-        View Suppliers
-      </Link>
+      <div className="font-medium">{row.getValue("name")}</div>
     ),
   },
   {
@@ -271,7 +165,7 @@ export const columns: ColumnDef<Product>[] = [
   },
 ];
 
-export default function CategoriesDataTable() {
+export default function CategoriesDataTable({ categories }: { categories: CategoryItem }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -328,11 +222,8 @@ export default function CategoriesDataTable() {
       return {
         ID: rowData.id,
         Name: rowData.name,
-        Category: rowData.category,
-        Status: rowData.status,
-        Stock: rowData.stock,
-        "Sales Count": rowData.salesCount,
-        Price: `$${rowData.price.toFixed(2)}`,
+        Slug: rowData.slug,
+        Image: rowData.image,
       };
     });
 
@@ -348,7 +239,7 @@ export default function CategoriesDataTable() {
   };
 
   const [images, setImages] = React.useState<File[]>([]);
-  const { data, setData, post, processing, errors, reset } = useForm<Required<CreateCategoryItem>>({
+  const { data, setData, processing, errors, reset } = useForm<Required<CreateCategoryItem>>({
     name: '',
     slug: '',
     image: null,
@@ -363,9 +254,6 @@ export default function CategoriesDataTable() {
     router.post('/dashboard/categories/store', data, {
       onFinish: () => reset()
     })
-    // post(route('register'), {
-    //   onFinish: () => reset('password', 'password_confirmation'),
-    // });
   };
 
   return (
@@ -386,9 +274,9 @@ export default function CategoriesDataTable() {
             </Button>
             <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
               <DialogTrigger asChild>
-                <Button className="bg-rose-500 hover:bg-rose-600">
+                <Button disabled={processing} className="bg-rose-500 hover:bg-rose-600">
                   <Plus className="mr-2 h-4 w-4" />
-                  Add New
+                  {processing ? "Creating" : "Add Category" }
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[750px]">
@@ -438,9 +326,9 @@ export default function CategoriesDataTable() {
                     </div>
 
                     <div className="grid w-full gap-3">
-                          <Label htmlFor="description">Your description</Label>
-                          <Textarea value={data.description} onChange={(e) => setData('description', e.target.value)} placeholder="Type your message here." id="message"></Textarea>
-                          <InputError message={errors.description} className="mt-2" />
+                      <Label htmlFor="description">Your description</Label>
+                      <Textarea value={data.description} onChange={(e) => setData('description', e.target.value)} placeholder="Type your message here." id="message"></Textarea>
+                      <InputError message={errors.description} className="mt-2" />
                     </div>
                   </div>
                   <DialogFooter>
