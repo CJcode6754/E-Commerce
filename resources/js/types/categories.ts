@@ -11,3 +11,11 @@ export interface CategoryItem {
   featured?: boolean;
   discount?: string;
 }
+
+export interface CreateCategoryItem {
+  name: string;
+  slug: string;
+  image: File|null;
+  color: string;
+  description: string;
+}

@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Shop\HomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,11 +17,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/products', action: function () {
         return Inertia::render('dashboard/products/index');
-    })->name('products');
+    })->name('admin.products');
 
-    Route::get('/dashboard/categories', action: function () {
-        return Inertia::render('dashboard/categories/index');
-    })->name('categories');
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/dashboard/categories', 'index')->name('admin.categories');
+        Route::post('/dashboard/categories/store', 'store')->name('admin.categories.store');
+    });
 });
 
 require __DIR__.'/settings.php';

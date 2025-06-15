@@ -10,8 +10,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CategoryItem } from "@/types/categories";
+import { Link } from "@inertiajs/react";
 
-export default function ShopCategory({categories}:{categories:CategoryItem[]}) {
+export default function ShopCategory({ categories }: { categories: CategoryItem[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -119,95 +120,97 @@ export default function ShopCategory({categories}:{categories:CategoryItem[]}) {
             onMouseLeave={handleMouseLeave}
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {categories.map((category, idx) => (
-              <a
-                key={category.id}
-                href={`/category/${category.slug}`}
-                className={`snap-start flex-shrink-0 w-[80%] sm:w-[45%] md:w-[32%] lg:w-[24%] xl:w-[20%] overflow-hidden cursor-pointer transition-all duration-300 transform ${
-                  !isDragging && hoveredCard === category.id
-                    ? "scale-[1.02]"
-                    : "scale-100"
-                }`}
-                onMouseEnter={() => !isDragging && setHoveredCard(category.id)}
-                onMouseLeave={() => setHoveredCard(null)}
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: `${
-                    isVisible ? "translateY(0)" : "translateY(20px)"
-                  } ${
-                    !isDragging && hoveredCard === category.id
-                      ? "scale(1.02)"
-                      : "scale(1)"
-                  }`,
-                  transition: "all 0.4s ease",
-                  transitionDelay: `${idx * 0.05}s`,
-                }}
-              >
-                {/* Unique card design */}
-                <div
-                  className={`h-full rounded-xl overflow-hidden shadow-md ${category.color} border border-gray-100`}
-                >
-                  {/* Card top with image */}
-                  <div className="relative h-40 overflow-hidden">
-                    {/* Image with overlay */}
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                    />
-
-                    {/* Overlay with icon */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                      <h3 className="text-white text-lg font-bold">
-                        {category.name}
-                      </h3>
-                    </div>
-
-                    {/* Discount tag if available */}
-                    {category.discount && (
-                      <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md">
-                        {category.discount}
-                      </div>
-                    )}
-
-                    {/* Featured tag */}
-                    {category.featured && (
-                      <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md flex items-center">
-                        <Star className="w-3 h-3 mr-1 fill-white" /> Featured
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Card bottom with details */}
-                  <div className="p-4 flex flex-col">
-                    <div className="flex items-center justify-between mb-3">
-                      {/* Icon */}
-                      <div
-                        className={`p-2 rounded-full ${category.textColor} bg-white shadow-sm`}
-                      >
-                        {category.icon}
-                      </div>
-
-                      {/* Product count */}
-                      <div className="text-sm text-gray-600">
-                        {category.count} products
-                      </div>
-                    </div>
-
-                    {/* Shop now button */}
-
-                    <button
-                      className={cn(
-                        `mt-2 py-2 px-4 rounded-lg text-white flex items-center justify-center font-medium text-sm hover:opacity-90 transition-opacity`,
-                        `${category.bgColor}`
-                      )}
+            {categories.map((category, idx) => {
+              const image_path = category.image.startsWith("category_image/") ? `/storage/${category.image}` : category.image
+              return (
+                (
+                  <Link
+                    key={category.id}
+                    href={`/category/${category.slug}`}
+                    className={`snap-start flex-shrink-0 w-[80%] sm:w-[45%] md:w-[32%] lg:w-[24%] xl:w-[20%] overflow-hidden cursor-pointer transition-all duration-300 transform ${!isDragging && hoveredCard === category.id
+                        ? "scale-[1.02]"
+                        : "scale-100"
+                      }`}
+                    onMouseEnter={() => !isDragging && setHoveredCard(category.id)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                    style={{
+                      opacity: isVisible ? 1 : 0,
+                      transform: `${isVisible ? "translateY(0)" : "translateY(20px)"
+                        } ${!isDragging && hoveredCard === category.id
+                          ? "scale(1.02)"
+                          : "scale(1)"
+                        }`,
+                      transition: "all 0.4s ease",
+                      transitionDelay: `${idx * 0.05}s`,
+                    }}
+                  >
+                    {/* Unique card design */}
+                    <div
+                      className={`h-full rounded-xl overflow-hidden shadow-md ${category.color} border border-gray-100`}
                     >
-                      <ShoppingBag className="w-4 h-4 mr-2 text-gray-800" /> <span className="text-black">Shop Now</span>
-                    </button>
-                  </div>
-                </div>
-              </a>
-            ))}
+                      {/* Card top with image */}
+                      <div className="relative h-40 overflow-hidden">
+                        {/* Image with overlay */}
+                        <img
+                          src={image_path}
+                          alt={category.name}
+                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                        />
+
+                        {/* Overlay with icon */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                          <h3 className="text-white text-lg font-bold">
+                            {category.name}
+                          </h3>
+                        </div>
+
+                        {/* Discount tag if available */}
+                        {category.discount && (
+                          <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md">
+                            {category.discount}
+                          </div>
+                        )}
+
+                        {/* Featured tag */}
+                        {category.featured && (
+                          <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md flex items-center">
+                            <Star className="w-3 h-3 mr-1 fill-white" /> Featured
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card bottom with details */}
+                      <div className="p-4 flex flex-col">
+                        <div className="flex items-center justify-between mb-3">
+                          {/* Icon */}
+                          <div
+                            className={`p-2 rounded-full ${category.textColor} bg-white shadow-sm`}
+                          >
+                            {category.icon}
+                          </div>
+
+                          {/* Product count */}
+                          <div className="text-sm text-gray-600">
+                            {category.count} products
+                          </div>
+                        </div>
+
+                        {/* Shop now button */}
+
+                        <button
+                          className={cn(
+                            `mt-2 py-2 px-4 rounded-lg text-white flex items-center justify-center font-medium text-sm hover:opacity-90 transition-opacity`,
+                            `${category.bgColor}`
+                          )}
+                        >
+                          <ShoppingBag className="w-4 h-4 mr-2 text-gray-800" /> <span className="text-black">Shop Now</span>
+                        </button>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              )
+            })}
           </div>
 
           {/* Navigation arrows - mobile */}
