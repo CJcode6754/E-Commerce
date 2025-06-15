@@ -47,6 +47,6 @@ class Product extends Model
 
         return $query->where('category_id', $product->category_id)
             ->where('id', '!=', $productId)
-            ->where('is_active', true);
+            ->take(4);
     }
 }

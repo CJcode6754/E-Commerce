@@ -72,6 +72,7 @@ import { CategoryItem, CreateCategoryItem } from "@/types/categories";
 import { CompactFileInput } from "../FormInputs";
 import { Textarea } from "@headlessui/react";
 import InputError from "../input-error";
+import { toast } from "sonner";
 
 export type Product = {
   id: string;
@@ -165,7 +166,7 @@ export const columns: ColumnDef<CategoryItem>[] = [
   },
 ];
 
-export default function CategoriesDataTable({ categories }: { categories: CategoryItem }) {
+export default function CategoriesDataTable({ categories }: { categories: CategoryItem[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -252,7 +253,10 @@ export default function CategoriesDataTable({ categories }: { categories: Catego
     data.image = images[0];
     console.log(data);
     router.post('/dashboard/categories/store', data, {
-      onFinish: () => reset()
+      onFinish: () => {
+        reset();
+        toast.success("Category created successfully!");
+      }
     })
   };
 
@@ -276,7 +280,7 @@ export default function CategoriesDataTable({ categories }: { categories: Catego
               <DialogTrigger asChild>
                 <Button disabled={processing} className="bg-rose-500 hover:bg-rose-600">
                   <Plus className="mr-2 h-4 w-4" />
-                  {processing ? "Creating" : "Add Category" }
+                  {processing ? "Creating" : "Add Category"}
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[750px]">

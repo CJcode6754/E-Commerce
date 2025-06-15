@@ -45,7 +45,7 @@ class CategoryController extends Controller
             'image' => $path
         ]);
 
-        return redirect()->route('admin.categories')->with('success', 'Successfully Created New Category');
+        return Inertia::location(route('admin.categories'));
     }
 
     /**

@@ -3,10 +3,10 @@ import ShopCategory from '@/components/frontend/ShopCategory'
 import ShopFeaturedProducts from '@/components/frontend/ShopFeaturedProducts'
 import ShopFrontLayout from '@/layouts/ShopFrontLayout'
 import { CategoryItem } from '@/types/categories'
+import { ProductItem } from '@/types/products'
 import React from 'react'
 
-const home = ({categories}:{categories:CategoryItem[]}) => {
-  console.log(categories);
+const home = ({categories, products}:{categories:CategoryItem[], products:ProductItem[]}) => {
   return (
     <ShopFrontLayout>
       <div className='min-h-screen'>
@@ -16,7 +16,7 @@ const home = ({categories}:{categories:CategoryItem[]}) => {
         </div>
 
         <div className="py-8">
-          <ShopFeaturedProducts/>
+          <ShopFeaturedProducts products={products}/>
         </div>
       </div>
     </ShopFrontLayout>

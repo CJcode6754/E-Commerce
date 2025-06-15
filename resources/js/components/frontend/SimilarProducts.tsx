@@ -26,7 +26,7 @@ export default function SimilarProducts({similarProducts}: {similarProducts:Simi
                     <a href="#" key={product.id} className="group block">
                         <div className="aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
                             <img
-                                src={product.image}
+                                src={`/storage/${product.image}`}
                                 alt={product.name}
                                 width={500}
                                 height={500}
@@ -56,7 +56,7 @@ export default function SimilarProducts({similarProducts}: {similarProducts:Simi
                                 </p>
                             </div>
                             <p className="mt-1 text-sm font-medium text-gray-900">
-                                ${product.price.toFixed(2)}
+                                ${Number(product.price).toFixed(2)}
                             </p>
                         </div>
                     </a>
